@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Loan Approval Prediction</title>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -42,6 +43,7 @@
             font-size: 16px;
             border-radius: 5px;
             cursor: pointer;
+            width: 100%;
         }
 
         button:hover {
@@ -68,102 +70,134 @@
 </head>
 <body>
 
-    <!-- Welcome Screen -->
-    <div id="welcome">
-        <h1>Loan Approval Prediction</h1>
-        <p>
-            Welcome to the Loan Prediction project!  
-            This application predicts whether a loan will be approved based on various parameters.
-        </p>
-        <p>To get started, please click the "Start" button below.</p>
-        <button onclick="startApp()">Start</button>
+<!-- Welcome Screen -->
+<div id="welcome">
+    <h1>Loan Approval Prediction</h1>
+    <p>
+        Welcome to the Loan Prediction project!  
+        This application predicts whether a loan will be approved.
+    </p>
+    <button onclick="startApp()">Start</button>
+</div>
+
+<!-- Form Screen -->
+<div id="formSection" class="container hidden">
+    <h2>Loan Application Form</h2>
+
+    <div class="form-group">
+        <label>Applicant Name</label>
+        <input type="text" id="applicant_name">
     </div>
 
-    <!-- Form Screen -->
-    <div id="formSection" class="container hidden">
-        <h2>Loan Application Form</h2>
-        <div class ="form-group">
-            <label>Applicant Name</label>
-            <input type="text">
-        </div>
-
-        <div class="form-group">
-            <label>Applicant Income</label>
-            <input type="number">
-        </div>
-
-        <div class="form-group">
-            <label>Coapplicant Income</label>
-            <input type="number">
-        </div>
-
-        <div class="form-group">
-            <label>Loan Amount</label>
-            <input type="number">
-        </div>
-
-        <div class="form-group">
-            <label>Loan Amount Term</label>
-            <input type="number">
-        </div>
-
-        <div class="form-group">
-            <label>Credit History</label>
-            <select>
-                <option>Yes</option>
-                <option>No</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>Gender</label>
-            <select>
-                <option>Male</option>
-                <option>Female</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>Married</label>
-            <select>
-                <option>Yes</option>
-                <option>No</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>Education (Not Graduate)</label>
-            <select>
-                <option>Yes</option>
-                <option>No</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>Self Employed</label>
-            <select>
-                <option>Yes</option>
-                <option>No</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>Property Area (Urban)</label>
-            <select>
-                <option>Yes</option>
-                <option>No</option>
-            </select>
-        </div>
-
-        <button style="width:100%; margin-top:10px;">Predict</button>
+    <div class="form-group">
+        <label>Applicant Income</label>
+        <input type="number" id="applicant_income">
     </div>
 
-    <script>
-        function startApp() {
-            document.getElementById("welcome").style.display = "none";
-            document.getElementById("formSection").classList.remove("hidden");
-        }
-    </script>
+    <div class="form-group">
+        <label>Coapplicant Income</label>
+        <input type="number" id="coapplicant_income">
+    </div>
+
+    <div class="form-group">
+        <label>Loan Amount</label>
+        <input type="number" id="loan_amount">
+    </div>
+
+    <div class="form-group">
+        <label>Loan Amount Term</label>
+        <input type="number" id="loan_term">
+    </div>
+
+    <div class="form-group">
+        <label>Credit History</label>
+        <select id="credit_history">
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Gender</label>
+        <select id="gender">
+            <option value="1">Male</option>
+            <option value="0">Female</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Married</label>
+        <select id="married">
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Education (Not Graduate)</label>
+        <select id="education">
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Self Employed</label>
+        <select id="self_employed">
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Property Area (Urban)</label>
+        <select id="property_area">
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+        </select>
+    </div>
+
+    <button onclick="predictLoan()">Predict</button>
+
+    <h3 id="result"></h3>
+</div>
+
+<script>
+function startApp() {
+    document.getElementById("welcome").style.display = "none";
+    document.getElementById("formSection").classList.remove("hidden");
+}
+
+function predictLoan() {
+    const data = {
+        applicant_income: Number(document.getElementById("applicant_income").value),
+        coapplicant_income: Number(document.getElementById("coapplicant_income").value),
+        loan_amount: Number(document.getElementById("loan_amount").value),
+        loan_term: Number(document.getElementById("loan_term").value),
+        credit_history: Number(document.getElementById("credit_history").value),
+        gender: Number(document.getElementById("gender").value),
+        married: Number(document.getElementById("married").value),
+        education_not_graduate: Number(document.getElementById("education").value),
+        self_employed: Number(document.getElementById("self_employed").value),
+        property_area_urban: Number(document.getElementById("property_area").value)
+    };
+
+    fetch("http://127.0.0.1:8000/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(result => {
+        document.getElementById("result").innerText =
+            "Loan Status: " + result.loan_status;
+    })
+    .catch(() => {
+        document.getElementById("result").innerText =
+            "Error: FastAPI server not running";
+    });
+}
+</script>
 
 </body>
 </html>
